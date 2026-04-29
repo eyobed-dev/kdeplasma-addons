@@ -22,7 +22,6 @@ PlasmaComponents.ScrollView {
     property int displayTemperatureUnit: 0
 
     readonly property int preferredIconSize: Kirigami.Units.iconSizes.large
-    readonly property int preferredCellsMargin: Kirigami.Units.largeSpacing * 2
 
     readonly property real preferredCellWidth: root.preferredIconSize
     readonly property real preferredCellHeight: root.preferredIconSize + 4 * labelFontMetrics.height + Kirigami.Units.largeSpacing * 2
@@ -39,15 +38,14 @@ PlasmaComponents.ScrollView {
         }
     }
 
-    contentWidth: availableWidth - (contentItem as GridView).leftMargin - (contentItem as GridView).rightMargin
-    PlasmaComponents.ScrollBar.horizontal.policy: PlasmaComponents.ScrollBar.AlwaysOff
+    PlasmaComponents.ScrollBar.vertical.policy: PlasmaComponents.ScrollBar.AlwaysOff
 
     implicitWidth: preferredCellWidth * 7
     implicitHeight: preferredCellHeight
 
     focus: true
 
-    contentItem: GridView {
+    contentItem: ListView {
         id: forecasts
 
         interactive: false
@@ -56,8 +54,7 @@ PlasmaComponents.ScrollView {
 
         clip: true
 
-        cellWidth: root.preferredCellWidth + (width % root.preferredCellWidth) / (Math.floor(width / root.preferredCellWidth))
-        cellHeight: root.preferredCellHeight
+        orientation: ListView.Horizontal
 
         delegate: ColumnLayout {
             id: dayDelegate
@@ -65,9 +62,6 @@ PlasmaComponents.ScrollView {
             visible: !!model.conditionIcon
 
             width: root.preferredCellWidth
-            height: root.preferredCellHeight - root.preferredCellsMargin
-
-            anchors.bottomMargin: root.preferredCellsMargin
 
             spacing: Math.round(Kirigami.Units.smallSpacing / 2)
 
