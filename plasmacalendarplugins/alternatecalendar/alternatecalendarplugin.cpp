@@ -18,6 +18,7 @@
 #include "provider/hebrewcalendar.h"
 #include "provider/indiancalendar.h"
 #include "provider/islamiccalendar.h"
+#include "provider/ethiopiccalendar.h"
 #endif
 
 using namespace Qt::StringLiterals;
@@ -59,6 +60,9 @@ void AlternateCalendarPlugin::loadEventsForDateRange(const QDate &startDate, con
         break;
     case CalendarSystem::Hebrew:
         m_provider = new HebrewCalendarProvider(this, m_calendarSystem, startDate, endDate);
+        break;
+    case CalendarSystem::Ethiopic:
+        m_provider = new EthiopicCalendarProvider(this, m_calendarSystem, startDate, endDate);
         break;
     case CalendarSystem::Jalali:
     case CalendarSystem::Islamic:
