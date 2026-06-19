@@ -26,6 +26,8 @@ GraphsView {
 
     property var toolTipTextFunction: null
 
+    property int currentPointIndex: -1
+
     marginBottom: Kirigami.Units.largeSpacing
     marginTop: Kirigami.Units.largeSpacing
     clipPlotArea: false
@@ -68,11 +70,18 @@ GraphsView {
             property real pointValueY
             property int pointIndex
 
-            width: Kirigami.Units.iconSizes.small
-            height: Kirigami.Units.iconSizes.small
+            width: Kirigami.Units.gridUnit * 0.5
+            height: width
             radius: width * 0.5
 
-            color: pointHover.hovered ? Kirigami.Theme.linkColor : Kirigami.Theme.highlightColor
+            color: Kirigami.Theme.highlightColor
+            opacity: root.currentPointIndex === pointIndex ? 1 : 0
+
+            Behavior on opacity {
+                OpacityAnimator {
+                    duration: Kirigami.Units.shortDuration
+                }
+            }
 
             HoverHandler {
                 id: pointHover

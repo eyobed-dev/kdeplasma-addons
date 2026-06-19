@@ -93,6 +93,67 @@ QVariant FutureHoursPoints::data(const QModelIndex &index, int role) const
     return {};
 }
 
+int FutureHoursPoints::totalHours() const
+{
+    return m_futureHours->rowCount();
+}
+
+int FutureHoursPoints::hoursPerDay() const
+{
+    QVariant startDateVariant = m_futureHours->data(m_futureHours->index(0), FutureHours::Timestamp);
+    if (!startDateVariant.canConvert<QDateTime>()) {
+        return 0;
+    }
+
+    QDateTime startDate = startDateVariant.toDateTime();
+
+    int hourCount = 1;
+    while (hourCount < m_futureHours->rowCount()) {
+        QVariant dateVariant = m_futureHours->data(m_futureHours->index(hourCount), FutureHours::Timestamp);
+        if (!dateVariant.canConvert<QDateTime>()) {
+            return hourCount;
+        }
+
+        QDateTime date = dateVariant.toDateTime();
+
+        if (startDate.time().hour() == date.time().hour() || startDate.daysTo(date) >= 2) {
+            break;
+        }
+
+        ++hourCount;
+    }
+
+    return hourCount;
+}
+
+int FutureHoursPoints::totalDays() const
+{
+    QVariant startDateVariant = m_futureHours->data(m_futureHours->index(0), FutureHours::Timestamp);
+    if (!startDateVariant.canConvert<QDateTime>()) {
+        return 0;
+    }
+
+    QDateTime startDate = startDateVariant.toDateTime();
+
+    int daysNumber = 0;
+
+    for (int hourCount = 1; hourCount < m_futureHours->rowCount(); ++hourCount) {
+        QVariant dateVariant = m_futureHours->data(m_futureHours->index(hourCount), FutureHours::Timestamp);
+        if (!dateVariant.canConvert<QDateTime>()) {
+            return daysNumber;
+        }
+
+        QDateTime date = dateVariant.toDateTime();
+
+        if (startDate.daysTo(date) >= 1) {
+            startDate = date;
+            ++daysNumber;
+        }
+    }
+
+    return daysNumber;
+}
+
 QDateTime FutureHoursPoints::minDate() const
 {
     QVariant date = m_futureHours->data(m_futureHours->index(0), FutureHours::Timestamp);
